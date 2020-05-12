@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -55,6 +57,27 @@ func main() {
 		}
 
 	case "mk":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the new container")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("New container password: ")
+		password, _ := reader.ReadString('\n')
+
+		cont, err := newContainer(args[1], password)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+		}
+
+		err = cont.write()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+		}
+
 	case "rm":
 
 	case "del":
