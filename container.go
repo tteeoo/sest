@@ -98,7 +98,48 @@ func (c container) getData(password string) (map[string]string, error) {
 		return data, nil
 	}
 
-	fmt.Println("sest: error: invalid master password for container", c.name)
+	fmt.Println("sest: error: invalid password for container", c.name)
 	os.Exit(1)
 	return nil, nil
+}
+
+func (c container) setData(newData map[string]string, password string) error {
+	validHash, err := bDecode(c.master[0])
+	if err != nil {
+		return err
+	}
+
+	salt, err := bDecode(c.master[1])
+	if err != nil {
+		return err
+	}
+
+	newHash := a2Hash(password, salt)
+
+	if reflect.DeepEqual(newHash, validHash) {
+		encSalt, err := bDecode(c.master[2])
+		if err != nil {
+			return err
+		}
+
+		key := a2Hash(password, encSalt)
+
+		bData, err := json.Marshal(newData)
+		if err != nil {
+			return err
+		}
+
+		bEnc, err := encrypt(string(bData), key)
+		if err != nil {
+			return err
+		}
+
+		c.data = bEncode(bEnc)
+
+		return nil
+	}
+
+	fmt.Println("sest: error: invalid password for container", c.name)
+	os.Exit(1)
+	return nil
 }
