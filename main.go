@@ -25,6 +25,7 @@ func main() {
 		os.Mkdir(contDir, 0700)
 	}
 
+	// Get args
 	args := os.Args[1:]
 
 	if len(args) == 0 {
@@ -39,11 +40,13 @@ func main() {
 		file, err := os.Open(contDir)
 		if err != nil {
 			fmt.Println("sest: error:", err)
+			os.Exit(1)
 		}
 
 		containers, err := file.Readdirnames(0)
 		if err != nil {
 			fmt.Println("sest: error:", err)
+			os.Exit(1)
 		}
 
 		for _, name := range containers {
@@ -56,27 +59,44 @@ func main() {
 			}
 		}
 
+	// Makes a new container
 	case "mk":
 		if len(args) < 2 {
 			fmt.Println("sest: error: please provide a name for the new container")
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("New container password: ")
-		password, _ := reader.ReadString('\n')
-
-		cont, err := newContainer(args[1], password)
-		if err != nil {
-			fmt.Println("sest: error:", err)
+		for _, char := range []string{".", "/", "@", "\\", "&", "*"} {
+			if strings.Contains(args[1], char) {
+				fmt.Println("sest: error: invalid character (" + char + ") in container name")
+				os.Exit(1)
+			}
 		}
 
-		err = cont.write()
-		if err != nil {
-			fmt.Println("sest: error:", err)
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Print("New container password: ")
+			password, _ := reader.ReadString('\n')
+
+			cont, err := newContainer(args[1], password)
+			if err != nil {
+				fmt.Println("sest: error:", err)
+				os.Exit(1)
+			}
+
+			err = cont.write()
+			if err != nil {
+				fmt.Println("sest: error:", err)
+				os.Exit(1)
+			}
+
+			os.Exit(0)
 		}
+
+		fmt.Println("sest: error: a container with that name already exists")
+		os.Exit(1)
 
 	case "rm":
 
