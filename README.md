@@ -20,22 +20,22 @@ Otherwise, a linux binary is provided in the `bin/` directory (compiled on arch 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
 ## Usage
-sest [--version | -V] | [--help | -h] | [<command> [arguments]]
+`sest [--version | -V] | [--help | -h] | [<command> [arguments]]`
 
 ### Commands
-**mk (container name):** makes a new container, will ask for a master password
+`mk <container name>`: makes a new container, will ask for a master password
 
-**del (container name):** deletes a container, will ask for confirmation
+`del <container name>`: deletes a container, will ask for confirmation
 
-**ls:** lists all containers
+`ls`: lists all containers
 
-**in (container name) (key name):** stores a new key-value pair in a container, will ask for a master password and a value
+`in <container name> <key name>`: stores a new key-value pair in a container, will ask for a master password and a value
 
-**out (container name) (key name):** prints out the value of a key from a container, will ask for a master password
+`out <container name> <key name>`: prints out the value of a key from a container, will ask for a master password
 
-**ln:** lists all keys in a container, will ask for a master password
+`ln <container name>`: lists all keys in a container, will ask for a master password
 
-**rm (container name) (key name):** removes a key-value pair from a container, will ask for a master password
+`rm <container name> <key name>`: removes a key-value pair from a container, will ask for a master password
 
 ## Security
 To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for stolen data), although I trust this program and I'm 99% sure that it's perfectly fine for storing any sensitive information.
