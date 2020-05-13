@@ -256,7 +256,7 @@ func main() {
 		}
 
 		if _, ok := data[args[2]]; ok {
-			fmt.Println(args[2]+":", data[args[2]])
+			fmt.Print(args[2]+":", data[args[2]])
 			os.Exit(0)
 		}
 		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
@@ -266,7 +266,16 @@ func main() {
 		fmt.Println("sest: version: 0.1.0")
 
 	case "-h", "--help":
-		fmt.Println("sest: usage:")
+		fmt.Println("sest: secure strings\n\n" +
+			"usage:\n\tsest [--version | -V] | [--help | -h] | [<command> [arguments]]\n\n" +
+			"commands:\n\tmk <container name>: makes a new container, will ask for a master password\n" +
+			"\n\tdel <container name>: deletes a container, will ask for confirmation\n" +
+			"\n\tls: lists all containers\n" +
+			"\n\tin <container name> <key name>: stores a new key-value pair in a container, will ask for a master password and a value\n" +
+			"\n\tout <container name> <key name>: prints out the value of a key from a container, will ask for a master password\n" +
+			"\n\tln: lists all keys in a container, will ask for a master password\n" +
+			"\n\trm <container name> <key name>: removes a key-value pair from a container, will ask for a master password\n\n" +
+			"source hosted on GitHub at https://github.com/tteeoo/sest")
 
 	default:
 		fmt.Println("sest: error: invalid arguments, run `sest --help` for usage")
