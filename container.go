@@ -24,7 +24,7 @@ func (c *container) write() error {
 		return err
 	}
 
-	err = ioutil.WriteFile(c.getPath(), b, 0700)
+	err = ioutil.WriteFile(c.getPath(), b, 0600)
 	if err != nil {
 		return err
 	}
