@@ -166,6 +166,12 @@ func main() {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
 			}
+
+			err = c.write()
+			if err != nil {
+				fmt.Println("sest: error:", err)
+				os.Exit(1)
+			}
 			os.Exit(0)
 		}
 		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
@@ -297,7 +303,7 @@ func main() {
 		os.Exit(0)
 
 	case "-V", "--version":
-		fmt.Println("sest: version: 0.1.2")
+		fmt.Println("sest: version: 0.1.3")
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
