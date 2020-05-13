@@ -309,6 +309,7 @@ func main() {
 			"\n\tout <container name> <key name>: prints out the value of a key from a container, will ask for a master password\n" +
 			"\n\tln: lists all keys in a container, will ask for a master password\n" +
 			"\n\trm <container name> <key name>: removes a key-value pair from a container, will ask for a master password\n\n" +
+			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end)\n" +
 			"source hosted on GitHub at https://github.com/tteeoo/sest")
 
 	default:
