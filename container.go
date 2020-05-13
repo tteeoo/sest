@@ -113,7 +113,7 @@ func (c *container) getData(password string) (map[string]string, error) {
 		return data, nil
 	}
 
-	fmt.Println("sest: error: invalid password for container", c.Name)
+	fmt.Println("sest: error: invalid password for container \""+ c.Name + "\"")
 	os.Exit(1)
 	return nil, nil
 }
@@ -154,7 +154,7 @@ func (c *container) setData(newData map[string]string, password string) error {
 		return nil
 	}
 
-	fmt.Println("sest: error: invalid password for container", c.Name)
+	fmt.Println("sest: error: invalid password for container \""+ c.Name + "\"")
 	os.Exit(1)
 	return nil
 }
