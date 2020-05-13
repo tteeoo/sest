@@ -10,17 +10,17 @@ A container stores data in key-value pairs.
 
 `sest` is compatible with pretty much all UNIXes (technically only tested on Linux, make an issue if it's not working for you)
 
-## Installation:
+## Installation
 If you have go installed, simply run `go install` [(install go here)](https://golang.org/doc/install#install)
 
 Otherwise, a linux binary is provided in the `bin/` directory (compiled on arch btw)
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
-## Usage:
+## Usage
 sest [--version | -V] | [--help | -h] | [<command> [arguments]]
 
-### Commands:
+### Commands
 **mk (container name):** makes a new container, will ask for a master password
 
 **del (container name):** deletes a container, will ask for confirmation
