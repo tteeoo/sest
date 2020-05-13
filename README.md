@@ -34,6 +34,8 @@ sest [--version | -V] | [--help | -h] | [<command> [arguments]]
 
 **rm (container name) (key name):** removes a key-value pair from a container, will ask for a master password
 
+The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
+
 ## Security
 To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for stolen data), although I trust this program and I'm 99% sure that it's perfectly fine for storing any sensitive information.
 
