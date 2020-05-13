@@ -114,8 +114,9 @@ func main() {
 		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Println("sest: press enter to delete the container " + args[1])
+		fmt.Print("sest: press enter to delete the container \"" + args[1] + "\"")
 		_, _ = reader.ReadString('\n')
+		print("\n")
 
 		err := os.Remove(contDir + "/" + args[1] + ".cont.json")
 		if err != nil {
@@ -167,7 +168,7 @@ func main() {
 			}
 			os.Exit(0)
 		}
-		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
+		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
 		os.Exit(1)
 
 	// Stores a key-value pair in a container
@@ -205,7 +206,7 @@ func main() {
 		}
 
 		if _, ok := data[args[2]]; ok {
-			fmt.Println("sest: error: the key " + args[2] + " already exists in that container")
+			fmt.Println("sest: error: the key \"" + args[2] + "\" already exists in that container")
 			os.Exit(1)
 		}
 
@@ -259,7 +260,7 @@ func main() {
 			fmt.Print(args[2]+":", data[args[2]])
 			os.Exit(0)
 		}
-		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
+		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
 		os.Exit(1)
 
 	// Lists all the keys in a container
@@ -311,7 +312,7 @@ func main() {
 			"source hosted on GitHub at https://github.com/tteeoo/sest")
 
 	default:
-		fmt.Println("sest: error: invalid arguments, run `sest --help` for usage")
+		fmt.Println("sest: error: invalid arguments, run \"sest --help\" for usage")
 		os.Exit(1)
 	}
 
