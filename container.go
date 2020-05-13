@@ -105,7 +105,7 @@ func (c *container) getData(password string) (map[string]string, error) {
 		}
 
 		var data map[string]string
-		err = json.Unmarshal(bData, data)
+		err = json.Unmarshal(bData, &data)
 		if err != nil {
 			return nil, err
 		}

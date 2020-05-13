@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"reflect"
 	"strings"
 )
 
@@ -80,6 +79,7 @@ func main() {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Print("sest: new container password: ")
 			password, _ := reader.ReadString('\n')
+			print("\n")
 
 			cont, err := newContainer(args[1], password)
 			if err != nil {
@@ -114,9 +114,37 @@ func main() {
 		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Println("sest: you are about to delete the container " + args[1] + ", type the container's password to confirm")
-		fmt.Print("container password: ")
+		fmt.Println("sest: press enter to delete the container " + args[1])
+		_, _ = reader.ReadString('\n')
+
+		err := os.Remove(contDir + "/" + args[1] + ".cont.json")
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+		os.Exit(0)
+
+	// Deletes a key from a container
+	case "rm":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to remove from")
+			os.Exit(1)
+		} else if len(args) < 3 {
+			fmt.Println("sest: error: please provide a key to remove from the container")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
+		print("\n")
 
 		c, err := openContainer(args[1])
 		if err != nil {
@@ -124,35 +152,115 @@ func main() {
 			os.Exit(1)
 		}
 
-		validHash, err := bDecode(c.Master[0])
+		data, err := c.getData(password)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
 
-		salt, err := bDecode(c.Master[1])
-		if err != nil {
-			fmt.Println("sest: error:", err)
-			os.Exit(1)
-		}
-
-		newHash := a2Hash(password, salt)
-
-		if reflect.DeepEqual(newHash, validHash) {
-			err = os.Remove(c.getPath())
+		if _, ok := data[args[2]]; ok {
+			delete(data, args[2])
+			err = c.setData(data, password)
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
 			}
 			os.Exit(0)
 		}
-
-		fmt.Println("sest: error: invalid password for container", c.Name)
+		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
 		os.Exit(1)
 
-	case "rm":
+	// Stores a key-value pair in a container
 	case "in":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to store in")
+			os.Exit(1)
+		} else if len(args) < 3 {
+			fmt.Println("sest: error: please provide a key to store in the container")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("sest: container password: ")
+		password, _ := reader.ReadString('\n')
+		print("\n")
+
+		c, err := openContainer(args[1])
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		data, err := c.getData(password)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		if _, ok := data[args[2]]; ok {
+			fmt.Println("sest: error: the key " + args[2] + " already exists in that container")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader = bufio.NewReader(os.Stdin)
+		fmt.Print("sest: new key value: ")
+		value, _ := reader.ReadString('\n')
+		print("\n")
+
+		data[args[2]] = value
+		err = c.setData(data, password)
+		c.write()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+		os.Exit(0)
+
+	// Gets the value from a key that is inside a container
 	case "out":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to read from")
+			os.Exit(1)
+		} else if len(args) < 3 {
+			fmt.Println("sest: error: please provide a key to read from the container")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("sest: container password: ")
+		password, _ := reader.ReadString('\n')
+		print("\n")
+
+		c, err := openContainer(args[1])
+
+		data, err := c.getData(password)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		if _, ok := data[args[2]]; ok {
+			fmt.Println(args[2]+":", data[args[2]])
+			os.Exit(0)
+		}
+		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
+		os.Exit(1)
 
 	case "-V", "--version":
 		fmt.Println("sest: version: 0.1.0")
@@ -166,5 +274,4 @@ func main() {
 	}
 
 	os.Exit(0)
-
 }
