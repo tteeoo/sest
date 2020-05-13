@@ -262,6 +262,39 @@ func main() {
 		fmt.Println("sest: error: the key " + args[2] + " does not exist in that container")
 		os.Exit(1)
 
+	// Lists all the keys in a container
+	case "ln":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to read from")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("sest: container password: ")
+		password, _ := reader.ReadString('\n')
+		print("\n")
+
+		c, err := openContainer(args[1])
+
+		data, err := c.getData(password)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		for _, key := range data {
+			fmt.Print(key)
+		}
+
+		os.Exit(0)
+
 	case "-V", "--version":
 		fmt.Println("sest: version: 0.1.0")
 
