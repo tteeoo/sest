@@ -297,7 +297,7 @@ func main() {
 		os.Exit(0)
 
 	case "-V", "--version":
-		fmt.Println("sest: version: 0.1.1")
+		fmt.Println("sest: version: 0.1.2")
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
@@ -307,7 +307,7 @@ func main() {
 			"\n\tls: lists all containers\n" +
 			"\n\tin <container name> <key name>: stores a new key-value pair in a container, will ask for a master password and a value\n" +
 			"\n\tout <container name> <key name>: prints out the value of a key from a container, will ask for a master password\n" +
-			"\n\tln: lists all keys in a container, will ask for a master password\n" +
+			"\n\tln <container name>: lists all keys in a container, will ask for a master password\n" +
 			"\n\trm <container name> <key name>: removes a key-value pair from a container, will ask for a master password\n\n" +
 			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end)\n" +
 			"source hosted on GitHub at https://github.com/tteeoo/sest")
