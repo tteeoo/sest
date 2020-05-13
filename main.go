@@ -80,6 +80,7 @@ func main() {
 			fmt.Print("sest: new container password: ")
 			password, _ := reader.ReadString('\n')
 			print("\n")
+			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 			cont, err := newContainer(args[1], password)
 			if err != nil {
@@ -117,6 +118,7 @@ func main() {
 		fmt.Print("sest: press enter to delete the container \"" + args[1] + "\"")
 		_, _ = reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		err := os.Remove(contDir + "/" + args[1] + ".cont.json")
 		if err != nil {
@@ -146,6 +148,7 @@ func main() {
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := openContainer(args[1])
 		if err != nil {
@@ -198,6 +201,7 @@ func main() {
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := openContainer(args[1])
 		if err != nil {
@@ -222,6 +226,7 @@ func main() {
 		fmt.Print("sest: new key value: ")
 		value, _ := reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		data[args[2]] = value
 		err = c.setData(data, password)
@@ -253,6 +258,7 @@ func main() {
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := openContainer(args[1])
 
@@ -287,6 +293,7 @@ func main() {
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
 		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := openContainer(args[1])
 
