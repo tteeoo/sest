@@ -10,6 +10,8 @@ A container stores data in key-value pairs.
 
 `sest` is compatible with pretty much all UNIXes (technically only tested on Linux, make an issue if it's not working for you)
 
+![usage gif](https://raw.githubusercontent.com/tteeoo/sest/master/usage.gif)
+
 ## Installation
 If you have go installed, simply run `go install` [(install go here)](https://golang.org/doc/install#install)
 
