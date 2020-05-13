@@ -290,8 +290,8 @@ func main() {
 			os.Exit(1)
 		}
 
-		for _, key := range data {
-			fmt.Print(key)
+		for key := range data {
+			fmt.Println(key)
 		}
 
 		os.Exit(0)
