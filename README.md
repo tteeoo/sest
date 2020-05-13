@@ -1,5 +1,4 @@
-# sest
-## sest: secure strings
+# sest: secure strings
 
 `sest` is effectively a local command-line password manager, but can really be used to store any sensitive string of characters.
 
@@ -15,6 +14,8 @@ A container stores data in key-value pairs.
 If you have go installed, simply run `go install` [(install go here)](https://golang.org/doc/install#install)
 
 Otherwise, a linux binary is provided in the `bin/` directory (compiled on arch btw)
+
+The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
 ## Usage:
 sest [--version | -V] | [--help | -h] | [<command> [arguments]]
@@ -33,8 +34,6 @@ sest [--version | -V] | [--help | -h] | [<command> [arguments]]
 **ln:** lists all keys in a container, will ask for a master password
 
 **rm (container name) (key name):** removes a key-value pair from a container, will ask for a master password
-
-The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
 ## Security
 To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for stolen data), although I trust this program and I'm 99% sure that it's perfectly fine for storing any sensitive information.
