@@ -32,6 +32,21 @@ func (c *container) write() error {
 	return nil
 }
 
+func openContainer(name string) (*container, error) {
+	b, err := ioutil.ReadFile(contDir + "/" + name + ".cont.json")
+	if err != nil {
+		return &container{}, err
+	}
+
+	var cont container
+	err = json.Unmarshal(b, &cont)
+	if err != nil {
+		return &container{}, err
+	}
+
+	return &cont, nil
+}
+
 func newContainer(name, password string) (*container, error) {
 	salt, err := generateSalt(16)
 	if err != nil {

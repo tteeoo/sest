@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 )
 
@@ -77,7 +78,7 @@ func main() {
 			exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 
 			reader := bufio.NewReader(os.Stdin)
-			fmt.Print("New container password: ")
+			fmt.Print("sest: new container password: ")
 			password, _ := reader.ReadString('\n')
 
 			cont, err := newContainer(args[1], password)
@@ -98,9 +99,58 @@ func main() {
 		fmt.Println("sest: error: a container with that name already exists")
 		os.Exit(1)
 
-	case "rm":
-
+	// Deletes a container
 	case "del":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to delete")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Println("sest: you are about to delete the container " + args[1] + ", type the container's password to confirm")
+		fmt.Print("container password: ")
+		password, _ := reader.ReadString('\n')
+
+		c, err := openContainer(args[1])
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		validHash, err := bDecode(c.Master[0])
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		salt, err := bDecode(c.Master[1])
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		newHash := a2Hash(password, salt)
+
+		if reflect.DeepEqual(newHash, validHash) {
+			err = os.Remove(c.getPath())
+			if err != nil {
+				fmt.Println("sest: error:", err)
+				os.Exit(1)
+			}
+			os.Exit(0)
+		}
+
+		fmt.Println("sest: error: invalid password for container", c.Name)
+		os.Exit(1)
+
+	case "rm":
 	case "in":
 	case "out":
 
