@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -238,7 +239,7 @@ func main() {
 		os.Exit(0)
 
 	// Gets the value from a key that is inside a container
-	case "out":
+	case "out", "cp":
 		if len(args) < 2 {
 			fmt.Println("sest: error: please provide a name for the container to read from")
 			os.Exit(1)
@@ -269,7 +270,30 @@ func main() {
 		}
 
 		if _, ok := data[args[2]]; ok {
-			fmt.Print(args[2]+":", data[args[2]])
+
+			// copy to clipboard (needs xclip)
+			if args[0] == "cp" {
+				cmd := exec.Command("xclip")
+				stdin, err := cmd.StdinPipe()
+				if err != nil {
+					fmt.Println("sest: error:", err)
+					os.Exit(1)
+				}
+
+				go func() {
+					defer stdin.Close()
+					io.WriteString(stdin, data[args[2]])
+				}()
+
+				err = cmd.Run()
+				os.Exit(0)
+				if err != nil {
+					fmt.Println("sest: error:", err)
+					os.Exit(1)
+				}
+			}
+
+			fmt.Print(data[args[2]])
 			os.Exit(0)
 		}
 		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
@@ -310,20 +334,23 @@ func main() {
 		os.Exit(0)
 
 	case "-V", "--version":
-		fmt.Println("sest: version: 0.1.4")
+		fmt.Println("sest: version: 0.1.5")
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
 			"usage:\n\tsest [--version | -V] | [--help | -h] | [<command> [arguments]]\n\n" +
-			"commands:\n\tmk <container name>: makes a new container, will ask for a master password\n" +
-			"\n\tdel <container name>: deletes a container, will ask for confirmation\n" +
-			"\n\tls: lists all containers\n" +
-			"\n\tin <container name> <key name>: stores a new key-value pair in a container, will ask for a master password and a value\n" +
-			"\n\tout <container name> <key name>: prints out the value of a key from a container, will ask for a master password\n" +
-			"\n\tln <container name>: lists all keys in a container, will ask for a master password\n" +
-			"\n\trm <container name> <key name>: removes a key-value pair from a container, will ask for a master password\n\n" +
-			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end)\n" +
-			"source hosted on GitHub at https://github.com/tteeoo/sest")
+			"commands:\n" +
+			"\tls                     lists all containers\n" +
+			"\tmk  <container>        makes a new container, will ask for a master password\n" +
+			"\tln  <container>        lists all keys in a container, will ask for a master password\n" +
+			"\tdel <container>        deletes a container, will ask for confirmation\n" +
+			"\tin  <container> <key>  stores a new key-value pair in a container, will ask for a master password and a value\n" +
+			"\tcp  <container> <key>  copies the value of a key from a container to the clipboard (needs xclip installed), will ask for a master password\n" +
+			"\trm  <container> <key>  removes a key-value pair from a container, will ask for a master password\n" +
+			"\tout <container> <key>  prints out the value of a key from a container, will ask for a master password\n\n" +
+			"source hosted on GitHub (https://github.com/tteeoo/sest)\n" +
+			"licensed under the BSD 2-clause license (https://opensource.org/licenses/bsd-2-clause)\n" +
+			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end), defaults to ~/.sest")
 
 	default:
 		fmt.Println("sest: error: invalid arguments, run \"sest --help\" for usage")
