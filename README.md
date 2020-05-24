@@ -8,45 +8,42 @@ Each container has its own master password which is used to access its contents.
 
 A container stores data in key-value pairs.
 
-`sest` is compatible with pretty much all UNIXes (technically only tested on Linux, make an issue if it's not working for you)
+`sest` works on Linux based OSes and probably most UNIXes
 
 ![usage gif](https://raw.githubusercontent.com/tteeoo/sest/master/usage.gif)
 
 ## Installation
-If you have go installed, simply run `go install` [(install go here)](https://golang.org/doc/install#install)
+If you have Go installed [(install Go here)](https://golang.org/doc/install#install), simply clone the repo and run `go install` 
 
-Otherwise, a linux binary is provided in the `bin/` directory (compiled on arch btw)
+Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch btw)
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
+
+In order for the `cp` command to copy the secret to your clipboard you will need `xclip` installed, and of course you'll need to be running Xorg for xclip to work.
 
 ## Usage
 `sest [--version | -V] | [--help | -h] | [<command> [arguments]]`
 
 ### Commands
-`mk <container name>`: makes a new container, will ask for a master password
-
-`del <container name>`: deletes a container, will ask for confirmation
-
-`ls`: lists all containers
-
-`in <container name> <key name>`: stores a new key-value pair in a container, will ask for a master password and a value
-
-`out <container name> <key name>`: prints out the value of a key from a container, will ask for a master password
-
-`ln <container name>`: lists all keys in a container, will ask for a master password
-
-`rm <container name> <key name>`: removes a key-value pair from a container, will ask for a master password
+```
+ls                     lists all containers
+mk  <container>        makes a new container, will ask for a master password
+ln  <container>        lists all keys in a container, will ask for a master password
+del <container>        deletes a container, will ask for confirmation
+in  <container> <key>  stores a new key-value pair in a container, will ask for a master password and a value
+cp  <container> <key>  copies the value of a key from a container to the clipboard (needs xclip installed), will ask for a master password
+rm  <container> <key>  removes a key-value pair from a container, will ask for a master password
+out <container> <key>  prints out the value of a key from a container, will ask for a master password
+```
 
 ## Security
-To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for stolen data), although I trust this program and I'm 99% sure that it's perfectly fine for storing any sensitive information.
+To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for any stolen data), although (interperet this how you wish) I'm 99% sure that it's perfectly fine for storing sensitive information.
 
 So, here's how it works:
 
 * A random salt is generated and used with your password in an Argon2id hash
 * Another random salt is generated and also stored alongside the above two values (base64 encoded) in every container
 * The data of each container is encrypted with AES-256 GCM using your (verified) password Argon2 hashed with the other salt as the key
-
-I know, the salts aren't necassarily needed, but they make hashing everything a bit easier and don't have any negative side effects.
 
 ## License
 
