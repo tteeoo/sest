@@ -42,7 +42,7 @@ out <container> <key>  prints out the value of a key from a container, will ask 
 ```
 
 ## Security
-To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributers are responsible for any stolen data), although (interperet this how you wish) I'm 99% sure that it's perfectly fine for storing sensitive information.
+To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributors are responsible for any stolen data), although (interperet this how you wish) I'm 99% sure that it's perfectly fine for storing sensitive information.
 
 So, here's how it works:
 
