@@ -1,6 +1,6 @@
 # sest: secure strings
 
-`sest` is effectively a local command-line password manager, but can really be used to store any sensitive string of characters.
+`sest` (pronounced "es ee es tee") is effectively a local command-line password manager, but can really be used to store any sensitive string of characters.
 
 `sest` stores information in "containers", which are really just json files containing a password hash, salts, and some encrypted json.
 
