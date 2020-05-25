@@ -17,6 +17,11 @@ If you have Go installed [(install Go here)](https://golang.org/doc/install#inst
 
 Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch btw)
 
+To quickly install, run:
+```
+# wget https://github.com/tteeoo/sest/releases/download/0.1.5/sest -P /usr/bin
+```
+
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
 In order for the `cp` command to copy the secret to your clipboard you will need `xclip` installed, and of course you'll need to be running Xorg for xclip to work.
