@@ -340,14 +340,14 @@ func main() {
 		fmt.Println("sest: secure strings\n\n" +
 			"usage:\n\tsest [--version | -V] | [--help | -h] | [<command> [arguments]]\n\n" +
 			"commands:\n" +
-			"\tls                     lists all containers\n" +
-			"\tmk  <container>        makes a new container, will ask for a master password\n" +
-			"\tln  <container>        lists all keys in a container, will ask for a master password\n" +
-			"\tdel <container>        deletes a container, will ask for confirmation\n" +
-			"\tin  <container> <key>  stores a new key-value pair in a container, will ask for a master password and a value\n" +
-			"\tcp  <container> <key>  copies the value of a key from a container to the clipboard (needs xclip installed), will ask for a master password\n" +
-			"\trm  <container> <key>  removes a key-value pair from a container, will ask for a master password\n" +
-			"\tout <container> <key>  prints out the value of a key from a container, will ask for a master password\n\n" +
+			"\tls                   \n\t\tlists all containers\n\n" +
+			"\tmk  <container>      \n\t\tmakes a new container, will ask for a master password\n\n" +
+			"\tln  <container>      \n\t\tlists all keys in a container, will ask for a master password\n\n" +
+			"\tdel <container>      \n\t\tdeletes a container, will ask for confirmation\n\n" +
+			"\tin  <container> <key>\n\t\tstores a new key-value pair in a container, will ask for a master password and a value\n\n" +
+			"\tcp  <container> <key>\n\t\tcopies the value of a key from a container to the clipboard (needs xclip installed),\n\t\twill ask for a master password\n\n" +
+			"\trm  <container> <key>\n\t\tremoves a key-value pair from a container, will ask for a master password\n\n" +
+			"\tout <container> <key>\n\t\tprints out the value of a key from a container, will ask for a master password\n\n" +
 			"source hosted on GitHub (https://github.com/tteeoo/sest)\n" +
 			"licensed under the BSD 2-clause license (https://opensource.org/licenses/bsd-2-clause)\n" +
 			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end), defaults to ~/.sest")
