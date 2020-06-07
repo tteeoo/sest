@@ -19,7 +19,7 @@ Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch 
 
 To quickly install, run:
 ```
-# wget https://github.com/tteeoo/sest/releases/download/0.1.5/sest -P /usr/bin
+sudo wget https://github.com/tteeoo/sest/releases/download/0.1.5/sest -P /usr/bin && sudo chmod +x /usr/bin/sest
 ```
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
