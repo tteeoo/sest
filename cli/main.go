@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"github.com/tteeoo/sest/lib"
 )
 
 var contDir string = os.Getenv("SEST_DIR")
@@ -83,7 +84,7 @@ func main() {
 			print("\n")
 			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-			cont, err := newContainer(args[1], password)
+			cont, err := lib.NewContainer(args[1], password)
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
@@ -151,7 +152,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := openContainer(args[1])
+		c, err := lib.OpenContainer(args[1])
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -204,7 +205,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := openContainer(args[1])
+		c, err := lib.OpenContainer(args[1])
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -261,7 +262,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := openContainer(args[1])
+		c, err := lib.OpenContainer(args[1])
 
 		data, err := c.getData(password)
 		if err != nil {
@@ -319,7 +320,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := openContainer(args[1])
+		c, err := lib.OpenContainer(args[1])
 
 		data, err := c.getData(password)
 		if err != nil {
