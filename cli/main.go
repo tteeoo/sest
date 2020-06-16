@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/tteeoo/sest/slib"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
+	"github.com/tteeoo/sest/lib"
 )
 
 var contDir string = os.Getenv("SEST_DIR")
@@ -34,7 +34,6 @@ func main() {
 		fmt.Println("sest: error: invalid arguments, run `sest --help` for usage")
 		os.Exit(1)
 	}
-	slib.Test()
 
 	switch args[0] {
 
@@ -85,7 +84,7 @@ func main() {
 			print("\n")
 			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-			cont, err := slib.NewContainer(args[1], contDir, password)
+			cont, err := lib.NewContainer(args[1], contDir, password)
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
@@ -153,7 +152,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := slib.OpenContainer(args[1], contDir)
+		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -206,7 +205,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := slib.OpenContainer(args[1], contDir)
+		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -263,7 +262,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := slib.OpenContainer(args[1], contDir)
+		c, err := lib.OpenContainer(args[1], contDir)
 
 		data, err := c.GetData(password)
 		if err != nil {
@@ -321,7 +320,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := slib.OpenContainer(args[1], contDir)
+		c, err := lib.OpenContainer(args[1], contDir)
 
 		data, err := c.GetData(password)
 		if err != nil {

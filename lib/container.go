@@ -33,10 +33,6 @@ func (c *Container) Write() error {
 	return nil
 }
 
-func Test() {
-	fmt.Println("test")
-}
-
 func OpenContainer(name, dir string) (*Container, error) {
 	b, err := ioutil.ReadFile(dir + "/" + name + ".cont.json")
 	if err != nil {
