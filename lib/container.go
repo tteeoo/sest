@@ -75,7 +75,7 @@ func NewContainer(name, dir, password string) (*Container, error) {
 	}, nil
 }
 
-func (c *Container) Read(password string) (map[string]string, error) {
+func (c *Container) GetData(password string) (map[string]string, error) {
 	validHash, err := BDecode(c.Master[0])
 	if err != nil {
 		return nil, err

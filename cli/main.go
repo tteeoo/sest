@@ -84,13 +84,13 @@ func main() {
 			print("\n")
 			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-			cont, err := lib.NewContainer(args[1], password)
+			cont, err := lib.NewContainer(args[1], contDir, password)
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
 			}
 
-			err = cont.write()
+			err = cont.Write()
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
@@ -152,13 +152,13 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := lib.OpenContainer(args[1])
+		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
 
-		data, err := c.getData(password)
+		data, err := c.GetData(password)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
