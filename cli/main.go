@@ -205,7 +205,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := lib.OpenContainer(args[1])
+		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -262,7 +262,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := lib.OpenContainer(args[1])
+		c, err := lib.OpenContainer(args[1], contDir)
 
 		data, err := c.GetData(password)
 		if err != nil {
@@ -320,7 +320,7 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		c, err := lib.OpenContainer(args[1])
+		c, err := lib.OpenContainer(args[1], contDir)
 
 		data, err := c.GetData(password)
 		if err != nil {
