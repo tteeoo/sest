@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/tteeoo/sest/lib"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
-	"github.com/tteeoo/sest/lib"
 )
 
 var contDir string = os.Getenv("SEST_DIR")
@@ -166,13 +166,13 @@ func main() {
 
 		if _, ok := data[args[2]]; ok {
 			delete(data, args[2])
-			err = c.setData(data, password)
+			err = c.SetData(data, password)
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
 			}
 
-			err = c.write()
+			err = c.Write()
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
@@ -211,7 +211,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		data, err := c.getData(password)
+		data, err := c.GetData(password)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -231,8 +231,8 @@ func main() {
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		data[args[2]] = value
-		err = c.setData(data, password)
-		c.write()
+		err = c.SetData(data, password)
+		c.Write()
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -264,7 +264,7 @@ func main() {
 
 		c, err := lib.OpenContainer(args[1])
 
-		data, err := c.getData(password)
+		data, err := c.GetData(password)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -322,7 +322,7 @@ func main() {
 
 		c, err := lib.OpenContainer(args[1])
 
-		data, err := c.getData(password)
+		data, err := c.GetData(password)
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
