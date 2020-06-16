@@ -34,6 +34,7 @@ func main() {
 		fmt.Println("sest: error: invalid arguments, run `sest --help` for usage")
 		os.Exit(1)
 	}
+	lib.Test()
 
 	switch args[0] {
 

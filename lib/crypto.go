@@ -9,12 +9,12 @@ import (
 	"io"
 )
 
-func A2Hash(password string, salt []byte) []byte {
+func a2Hash(password string, salt []byte) []byte {
 	hash := argon2.IDKey([]byte(password), salt, 1, 64*1024, 4, 32)
 	return hash
 }
 
-func GenerateSalt(n int) ([]byte, error) {
+func generateSalt(n int) ([]byte, error) {
 	b := make([]byte, n)
 	_, err := rand.Read(b)
 	if err != nil {
@@ -24,7 +24,7 @@ func GenerateSalt(n int) ([]byte, error) {
 	return b, nil
 }
 
-func Encrypt(data string, key []byte) ([]byte, error) {
+func encrypt(data string, key []byte) ([]byte, error) {
 	cphr, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func Encrypt(data string, key []byte) ([]byte, error) {
 	return gcm.Seal(nonce, nonce, []byte(data), nil), nil
 }
 
-func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
+func decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -67,11 +67,11 @@ func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
-func BEncode(b []byte) string {
+func bEncode(b []byte) string {
 	return base64.RawStdEncoding.EncodeToString(b)
 }
 
-func BDecode(s string) ([]byte, error) {
+func bDecode(s string) ([]byte, error) {
 	b, err := base64.RawStdEncoding.DecodeString(s)
 	if err != nil {
 		return nil, err

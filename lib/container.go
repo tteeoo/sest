@@ -33,6 +33,10 @@ func (c *Container) Write() error {
 	return nil
 }
 
+func Test() {
+	fmt.Println("test")
+}
+
 func OpenContainer(name, dir string) (*Container, error) {
 	b, err := ioutil.ReadFile(dir + "/" + name + ".cont.json")
 	if err != nil {
@@ -49,20 +53,20 @@ func OpenContainer(name, dir string) (*Container, error) {
 }
 
 func NewContainer(name, dir, password string) (*Container, error) {
-	salt, err := GenerateSalt(16)
+	salt, err := generateSalt(16)
 	if err != nil {
 		return &Container{}, err
 	}
 
-	encSalt, err := GenerateSalt(16)
+	encSalt, err := generateSalt(16)
 	if err != nil {
 		return &Container{}, err
 	}
 
-	hash := A2Hash(password, salt)
-	encHash := A2Hash(password, encSalt)
+	hash := a2Hash(password, salt)
+	encHash := a2Hash(password, encSalt)
 
-	emptyData, err := Encrypt("{}", encHash)
+	emptyData, err := encrypt("{}", encHash)
 	if err != nil {
 		return &Container{}, err
 	}
@@ -70,38 +74,38 @@ func NewContainer(name, dir, password string) (*Container, error) {
 	return &Container{
 		Name:   name,
 		Dir:    dir,
-		Master: [3]string{BEncode(hash), BEncode(salt), BEncode(encSalt)},
-		Data:   BEncode(emptyData),
+		Master: [3]string{bEncode(hash), bEncode(salt), bEncode(encSalt)},
+		Data:   bEncode(emptyData),
 	}, nil
 }
 
 func (c *Container) GetData(password string) (map[string]string, error) {
-	validHash, err := BDecode(c.Master[0])
+	validHash, err := bDecode(c.Master[0])
 	if err != nil {
 		return nil, err
 	}
 
-	salt, err := BDecode(c.Master[1])
+	salt, err := bDecode(c.Master[1])
 	if err != nil {
 		return nil, err
 	}
 
-	newHash := A2Hash(password, salt)
+	newHash := a2Hash(password, salt)
 
 	if reflect.DeepEqual(newHash, validHash) {
-		encSalt, err := BDecode(c.Master[2])
+		encSalt, err := bDecode(c.Master[2])
 		if err != nil {
 			return nil, err
 		}
 
-		key := A2Hash(password, encSalt)
+		key := a2Hash(password, encSalt)
 
-		bEnc, err := BDecode(c.Data)
+		bEnc, err := bDecode(c.Data)
 		if err != nil {
 			return nil, err
 		}
 
-		bData, err := Decrypt(bEnc, key)
+		bData, err := decrypt(bEnc, key)
 		if err != nil {
 			return nil, err
 		}
@@ -121,37 +125,37 @@ func (c *Container) GetData(password string) (map[string]string, error) {
 }
 
 func (c *Container) SetData(newData map[string]string, password string) error {
-	validHash, err := BDecode(c.Master[0])
+	validHash, err := bDecode(c.Master[0])
 	if err != nil {
 		return err
 	}
 
-	salt, err := BDecode(c.Master[1])
+	salt, err := bDecode(c.Master[1])
 	if err != nil {
 		return err
 	}
 
-	newHash := A2Hash(password, salt)
+	newHash := a2Hash(password, salt)
 
 	if reflect.DeepEqual(newHash, validHash) {
-		encSalt, err := BDecode(c.Master[2])
+		encSalt, err := bDecode(c.Master[2])
 		if err != nil {
 			return err
 		}
 
-		key := A2Hash(password, encSalt)
+		key := a2Hash(password, encSalt)
 
 		bData, err := json.Marshal(newData)
 		if err != nil {
 			return err
 		}
 
-		bEnc, err := Encrypt(string(bData), key)
+		bEnc, err := encrypt(string(bData), key)
 		if err != nil {
 			return err
 		}
 
-		c.Data = BEncode(bEnc)
+		c.Data = bEncode(bEnc)
 
 		return nil
 	}
