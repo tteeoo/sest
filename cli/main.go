@@ -349,9 +349,9 @@ func main() {
 			"\tcp  <container> <key>\n\t\tcopies the value of a key from a container to the clipboard (needs xclip installed),\n\t\twill ask for a master password\n\n" +
 			"\trm  <container> <key>\n\t\tremoves a key-value pair from a container, will ask for a master password\n\n" +
 			"\tout <container> <key>\n\t\tprints out the value of a key from a container, will ask for a master password\n\n" +
+			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end), defaults to ~/.sest\n\n" +
 			"source hosted on GitHub (https://github.com/tteeoo/sest)\n" +
-			"licensed under the BSD 2-clause license (https://opensource.org/licenses/bsd-2-clause)\n" +
-			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end), defaults to ~/.sest")
+			"licensed under the BSD 2-clause license (https://opensource.org/licenses/bsd-2-clause)")
 
 	default:
 		fmt.Println("sest: error: invalid arguments, run \"sest --help\" for usage")
