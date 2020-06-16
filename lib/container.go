@@ -1,10 +1,9 @@
 package lib
 
 import (
+	"errors"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"os"
 	"reflect"
 )
 
@@ -115,9 +114,7 @@ func (c *Container) GetData(password string) (map[string]string, error) {
 		return data, nil
 	}
 
-	fmt.Println("sest: error: invalid password for container \"" + c.Name + "\"")
-	os.Exit(1)
-	return nil, nil
+	return nil, errors.New("invalid password for container \"" + c.Name + "\"")
 }
 
 func (c *Container) SetData(newData map[string]string, password string) error {
@@ -156,7 +153,5 @@ func (c *Container) SetData(newData map[string]string, password string) error {
 		return nil
 	}
 
-	fmt.Println("sest: error: invalid password for container \"" + c.Name + "\"")
-	os.Exit(1)
-	return nil
+	return errors.New("invalid password for container \"" + c.Name + "\"")
 }
