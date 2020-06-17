@@ -1,8 +1,8 @@
 package lib
 
 import (
-	"errors"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"reflect"
 )

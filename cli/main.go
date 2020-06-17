@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/tteeoo/sest/lib"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
-	"github.com/tteeoo/sest/lib"
 )
 
 var contDir string = os.Getenv("SEST_DIR")
