@@ -80,7 +80,12 @@ func main() {
 
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Print("sest: new container password: ")
-			password, _ := reader.ReadString('\n')
+			password, err := reader.ReadString('\n')
+			password = password[0:len(password)-1]
+			if err != nil {
+				fmt.Println("sest: error:", err)
+				os.Exit(1)
+			}
 			print("\n")
 			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
@@ -118,11 +123,15 @@ func main() {
 
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: press enter to delete the container \"" + args[1] + "\"")
-		_, _ = reader.ReadString('\n')
+		_, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		err := os.Remove(contDir + "/" + args[1] + ".cont.json")
+		err = os.Remove(contDir + "/" + args[1] + ".cont.json")
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -148,7 +157,12 @@ func main() {
 
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
-		password, _ := reader.ReadString('\n')
+		password, err := reader.ReadString('\n')
+		password = password[0:len(password)-1]
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
@@ -201,7 +215,12 @@ func main() {
 
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
-		password, _ := reader.ReadString('\n')
+		password, err := reader.ReadString('\n')
+		password = password[0:len(password)-1]
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
@@ -223,16 +242,22 @@ func main() {
 		}
 
 		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
 		reader = bufio.NewReader(os.Stdin)
 		fmt.Print("sest: new key value: ")
-		value, _ := reader.ReadString('\n')
+		value, err := reader.ReadString('\n')
+		value = value[0:len(value)-1]
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
+		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 		reader = bufio.NewReader(os.Stdin)
 		fmt.Print("sest: optional second value (username) leave blank for none: ")
 		username, _ := reader.ReadString('\n')
+		username = username[0:len(username)-1]
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
@@ -269,6 +294,7 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
+		password = password[0:len(password)-1]
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
@@ -330,6 +356,7 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
 		password, _ := reader.ReadString('\n')
+		password = password[0:len(password)-1]
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
