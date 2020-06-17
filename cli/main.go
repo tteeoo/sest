@@ -230,7 +230,17 @@ func main() {
 		print("\n")
 		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		data[args[2]] = value
+		reader = bufio.NewReader(os.Stdin)
+		fmt.Print("sest: optional second value (username) leave blank for none: ")
+		username, _ := reader.ReadString('\n')
+		print("\n")
+		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+
+		if len(username)  > 0 {
+			data[args[2]] = []string{value, username}
+		} else {
+			data[args[2]] = []string{value}
+		}
 		err = c.SetData(data, password)
 		c.Write()
 		if err != nil {
@@ -283,7 +293,7 @@ func main() {
 
 				go func() {
 					defer stdin.Close()
-					io.WriteString(stdin, data[args[2]])
+					io.WriteString(stdin, data[args[2]][0])
 				}()
 
 				err = cmd.Run()
@@ -294,7 +304,10 @@ func main() {
 				}
 			}
 
-			fmt.Print(data[args[2]])
+			fmt.Println(data[args[2]][0])
+			if len(data[args[2]]) > 1 {
+				fmt.Println(data[args[2]][1])
+			}
 			os.Exit(0)
 		}
 		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
