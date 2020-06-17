@@ -13,5 +13,5 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprint(w, "found")
+	fmt.Fprint(w, "{\"message\": \"authentication required\"}")
 }

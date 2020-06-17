@@ -12,5 +12,5 @@ func ErrorHandler(w http.ResponseWriter, r *http.Request, status int) {
 
 	util.Logger.Println("ERROR: " + util.GetRemoteAddr(r) + " " + strconv.Itoa(status))
 	w.WriteHeader(status)
-	fmt.Fprint(w, status, " " + http.StatusText(status))
+	fmt.Fprint(w, "{\"message:\": \"" + strconv.Itoa(status) + " " + http.StatusText(status) + "\"}")
 }

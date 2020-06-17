@@ -36,6 +36,8 @@ func main() {
 
 func rateLimit(handle func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+
 		limiter := limiter.GetLimiter(util.GetRemoteAddr(r))
 		if !limiter.Allow() {
 			handler.ErrorHandler(w, r, http.StatusTooManyRequests)
