@@ -7,6 +7,7 @@ import (
 	"reflect"
 )
 
+// Container represents a password-containing file
 type Container struct {
 	Name   string
 	Master [3]string
@@ -14,10 +15,12 @@ type Container struct {
 	Dir    string
 }
 
+// GetPath returns the path where the container is stored
 func (c *Container) GetPath() string {
 	return c.Dir + "/" + c.Name + ".cont.json"
 }
 
+// Write saves the container to its file
 func (c *Container) Write() error {
 	b, err := json.Marshal(c)
 	if err != nil {
@@ -32,6 +35,7 @@ func (c *Container) Write() error {
 	return nil
 }
 
+// OpenContainer returns a container struct derived from the given file name and directory
 func OpenContainer(name, dir string) (*Container, error) {
 	b, err := ioutil.ReadFile(dir + "/" + name + ".cont.json")
 	if err != nil {
@@ -47,6 +51,8 @@ func OpenContainer(name, dir string) (*Container, error) {
 	return &cont, nil
 }
 
+// NewContainer creates a new container encrypted with the given password, saved at the given file name and directory
+// It then returns the derived container struct
 func NewContainer(name, dir, password string) (*Container, error) {
 	salt, err := generateSalt(16)
 	if err != nil {
@@ -74,6 +80,7 @@ func NewContainer(name, dir, password string) (*Container, error) {
 	}, nil
 }
 
+// GetData decrypts and returns the data that the container stores
 func (c *Container) GetData(password string) (map[string][]string, error) {
 	validHash, err := bDecode(c.Master[0])
 	if err != nil {
@@ -117,6 +124,7 @@ func (c *Container) GetData(password string) (map[string][]string, error) {
 	return nil, errors.New("invalid password for container \"" + c.Name + "\"")
 }
 
+// SetData encrypts the given data with the password and ensures it is the correct password, then it sets the containers .Data
 func (c *Container) SetData(newData map[string][]string, password string) error {
 	validHash, err := bDecode(c.Master[0])
 	if err != nil {
