@@ -43,24 +43,29 @@ func main() {
 	defer util.LogFile.Close()
 
 	// Handle routes
-	http.HandleFunc("/", rateLimit(handler.IndexHandler))
+	http.HandleFunc("/", globalHandler(handler.IndexHandler))
 
 	// Start the server
 	util.Logger.Println("sest-server: attempting to listen on http://" + addr)
 	util.Logger.Fatal("sest-server: error: ", http.ListenAndServe(addr, nil))
 }
 
-func rateLimit(handle func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
+func globalHandler(handle func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Always respond with json
 		w.Header().Add("Content-Type", "application/json")
 
+		// Check for rate-limiting
 		limiter := limiter.GetLimiter(util.GetRemoteAddr(r))
 		if !limiter.Allow() {
 			handler.ErrorHandler(w, r, http.StatusTooManyRequests)
 			return
 		}
 
-		util.Logger.Println("HIT: " + util.GetRemoteAddr(r) + " " + r.RequestURI)
+		// Logging
+		util.Logger.Println("sest-server: request: host: " + util.GetRemoteAddr(r) + " uri: " + r.RequestURI + " method: " + r.Method + " ua: " + r.UserAgent())
+
 		handle(w, r)
 	}
 }
