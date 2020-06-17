@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/tteeoo/sest/server/handler"
 	"github.com/tteeoo/sest/server/limit"
 	"github.com/tteeoo/sest/server/util"
@@ -39,7 +38,7 @@ func rateLimit(handle func(w http.ResponseWriter, r *http.Request)) func(w http.
 	return func(w http.ResponseWriter, r *http.Request) {
 		limiter := limiter.GetLimiter(util.GetRemoteAddr(r))
 		if !limiter.Allow() {
-			fmt.Fprint(w, "429 too many requests")
+			handler.ErrorHandler(w, r, http.StatusTooManyRequests)
 			return
 		}
 
