@@ -9,8 +9,8 @@ import (
 )
 
 var cont string
-var addr = os.Getenv("WEB_ADDR")
-var contDir = os.Getenv("SEST_SERVER_DIR")
+var addr = os.Getenv("SEST_SERVER_ADDR")
+var contDir = os.Getenv("SEST_SERVER_CONT_DIR")
 
 var limiter = limit.NewIPRateLimiter(1, 5)
 
