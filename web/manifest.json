@@ -4,7 +4,7 @@
     "name": "sest",
     "version": "0.1.0",
   
-    "description": "Adds a browser action icon to the toolbar. Click the button to choose a beast. The active tab's body content is then replaced with a picture of the chosen beast. See https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Examples#beastify",
+    "description": "An open source local password/string manager",
     "homepage_url": "https://github.com/tteeoo/sest",
     "icons": {
       "48": "icons/icon.png"
