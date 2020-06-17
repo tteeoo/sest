@@ -6,21 +6,15 @@
 
 Each container has its own master password which is used to access its contents. Depending on your setup, you may only end up using one container (which is fine).
 
-A container stores data in key-value pairs.
+A container stores data in key-value pairs, with a main value, and another optional value, used to store usernames.
 
-`sest` works on Linux based OSes and probably most UNIXes
-
-![usage gif](https://raw.githubusercontent.com/tteeoo/sest/master/usage.gif)
+The cli `sest` app works on Linux based systems and probably most other unix based systems (not tested).
 
 ## Installation
-If you have Go installed [(install Go here)](https://golang.org/doc/install#install), simply clone the repo and run `go install` 
+### Command line app
+If you have Go installed [(install Go here)](https://golang.org/doc/install#install), simply clone the repo and run `go install`.
 
-Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch btw)
-
-To quickly install, run:
-```
-sudo wget https://github.com/tteeoo/sest/releases/download/0.1.5/sest -P /usr/bin && sudo chmod +x /usr/bin/sest
-```
+Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch btw).
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
