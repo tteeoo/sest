@@ -11,17 +11,20 @@ A container stores data in key-value pairs, with a main value, and another optio
 The cli `sest` app works on Linux based systems and probably most other unix based systems (not tested).
 
 ## Installation
-### Command line app
 If you have Go installed [(install Go here)](https://golang.org/doc/install#install), simply clone the repo and run `go install`.
 
-Otherwise, a Linux binary is provided in the `bin/` directory (compiled on arch btw).
+Otherwise, a Linux binary is provided with the latest release on GitHub.
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
 In order for the `cp` command to copy the secret to your clipboard you will need `xclip` installed, and of course you'll need to be running Xorg for xclip to work.
 
 ## Usage
-`sest [--version | -V] | [--help | -h] | [<command> [arguments]]`
+```
+sest [-h | --help ] 
+     [-V | --verison]
+     [<command> [arguments]]
+```
 
 ### Commands
 ```
@@ -36,7 +39,7 @@ out <container> <key>  prints out the value of a key from a container, will ask 
 ```
 
 ## Security
-To be frank, I am no cryptography expert, and one may find a flaw in this system (as such I, nor any other contributors are responsible for any stolen data), although (interperet this how you wish) I'm 99% sure that it's perfectly fine for storing sensitive information.
+To be frank, I am no cryptography expert, and one may find a flaw in this system. (interperet this how you wish) I'm 99% sure that it's perfectly fine for storing sensitive information.
 
 So, here's how it works:
 
@@ -46,4 +49,4 @@ So, here's how it works:
 
 ## License
 
-`sest` is licensed under the [BSD 2-clause license](https://github.com/tteeoo/sest/blob/master/LICENSE), use this product at your own risk.
+`sest` is licensed under the [BSD 2-clause license](https://github.com/tteeoo/sest/blob/master/LICENSE), use this program at your own risk; it offers no warranty for stolen information.
