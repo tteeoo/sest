@@ -1,5 +1,5 @@
 # sest: secure strings
-`sest` (pronounced "es ee es tee") is effectively a local command-line password manager, but can really be used to store any sensitive string of characters.
+`sest` (pronounced "es ee es tee") is a local command-line password manager.
 
 `sest` stores information in "containers", which are really just json files containing a password hash, salts, and some encrypted json.
 
@@ -10,7 +10,7 @@ A container stores data in key-value pairs, with a main value, and another optio
 `sest` works on Linux based systems and probably most other UNIX based systems (not tested).
 
 ## Installation
-If you have Go installed then simply clone the repo and run `go install`.
+If you have Go installed then simply clone the repo, cd into it, and run `go install`.
 
 Otherwise, a Linux binary is provided with the latest release on GitHub.
 
@@ -28,14 +28,16 @@ sest [-h | --help ]
 ### Commands
 ```
 ls                     lists all containers
-mk  <container>        makes a new container, asks for a master password
-ln  <container>        lists all keys in a container, asks for a master password
-chp  <container>       changes a container's password, asks for a master password and a new password
-del <container>        deletes a container, asks for confirmation
-in  <container> <key>  stores a new key-value pair in a container or changes an existing one, asks for a master password and a value
-cp  <container> <key>  copies the value of a key from a container to the clipboard (requires xclip), asks for a master password
-rm  <container> <key>  removes a key-value pair from a container, asks for a master password
-out <container> <key>  prints out the value of a key from a container, asks for a master password
+mk  <container>        makes a new container
+ln  <container>        lists all keys in a container
+chp <container>        changes a container's password
+del <container>        deletes a container
+in  <container> <key>  stores a new key-value pair in a container or changes an existing key
+cp  <container> <key>  copies the value of a key from a container to the clipboard (requires xclip)
+rm  <container> <key>  removes a key-value pair from a container
+out <container> <key>  prints out the value of a key from a container
+exp <container> <path> export a container to a json file
+imp <container> <path> import a container from a json file
 ```
 
 ## Security
