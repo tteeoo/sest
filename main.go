@@ -403,8 +403,8 @@ func main() {
 			"     mk  <container>           makes a new container, asks for a password\n" +
 			"     ln  <container>           lists all keys in a container, asks for a password\n" +
 			"     chp <container>           changes a container's password, asks for a password and a new password\n" +
-			"     el <container>           deletes a container, asks for confirmation\n" +
-			"     in  <container> <key>     stores a new key-value pair in a container, asks for a password and a value\n" +
+			"     del <container>           deletes a container, asks for confirmation\n" +
+			"     in  <container> <key>     stores a new key-value pair in a container or changes an existing one, asks for a password and a value\n" +
 			"     cp  <container> <key>     copies the value of a key from a container to the clipboard (requires xclip), asks for a password\n" +
 			"     rm  <container> <key>     removes a key-value pair from a container, asks for a password\n" +
 			"     out <container> <key>     prints out the value of a key from a container, asks for a password\n\n" +
