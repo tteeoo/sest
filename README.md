@@ -3,11 +3,11 @@
 
 `sest` stores information in "containers", which are really just json files containing a password hash, salts, and some encrypted json.
 
-Each container has its own master password which is used to access its contents. Depending on your setup, you may only end up using one container (which is fine).
+Each container has its own master password which is used to access its contents.
 
 A container stores data in key-value pairs, with a main value, and another optional value, used to store usernames.
 
-The cli `sest` app works on Linux based systems and probably most other unix based systems (not tested).
+`sest` works on Linux based systems and probably most other UNIX based systems (not tested).
 
 ## Installation
 If you have Go installed then simply clone the repo and run `go install`.
