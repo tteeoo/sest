@@ -76,7 +76,7 @@ func main() {
 	// Makes a new container
 	case "mk":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the new container")
+			fmt.Println("sest: error: provide a name for the new container")
 			os.Exit(1)
 		}
 
@@ -116,7 +116,7 @@ func main() {
 	// Deletes a container
 	case "del":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to delete")
+			fmt.Println("sest: error: provide a name for the container to delete")
 			os.Exit(1)
 		}
 
@@ -143,10 +143,10 @@ func main() {
 	// Deletes a key from a container
 	case "rm":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to remove from")
+			fmt.Println("sest: error: provide a name for the container to remove from")
 			os.Exit(1)
 		} else if len(args) < 3 {
-			fmt.Println("sest: error: please provide a key to remove from the container")
+			fmt.Println("sest: error: provide a key to remove from the container")
 			os.Exit(1)
 		}
 
@@ -196,10 +196,10 @@ func main() {
 	// Stores a key-value pair in a container
 	case "in":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to store in")
+			fmt.Println("sest: error: provide a name for the container to store in")
 			os.Exit(1)
 		} else if len(args) < 3 {
-			fmt.Println("sest: error: please provide a key to store in the container")
+			fmt.Println("sest: error: provide a key to store in the container")
 			os.Exit(1)
 		}
 
@@ -228,8 +228,7 @@ func main() {
 		}
 
 		if _, ok := data[args[2]]; ok {
-			fmt.Println("sest: error: the key '" + args[2] + "' already exists in that container")
-			os.Exit(1)
+			fmt.Println("sest: note that the key '" + args[2] + "' already exists in that container, if you continue its value will be changed")
 		}
 
 		fmt.Print("sest: new key value: ")
@@ -245,16 +244,20 @@ func main() {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
-		c.Write()
+		err = c.Write()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 
 	// Gets the value from a key that is inside a container
 	case "out", "cp":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to read from")
+			fmt.Println("sest: error: provide a name for the container to read from")
 			os.Exit(1)
 		} else if len(args) < 3 {
-			fmt.Println("sest: error: please provide a key to read from the container")
+			fmt.Println("sest: error: provide a key to read from the container")
 			os.Exit(1)
 		}
 
@@ -311,7 +314,7 @@ func main() {
 	// Lists all the keys in a container
 	case "ln":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to read from")
+			fmt.Println("sest: error: provide a name for the container to read from")
 			os.Exit(1)
 		}
 
@@ -344,7 +347,7 @@ func main() {
 	// Changes a container's password
 	case "chp":
 		if len(args) < 2 {
-			fmt.Println("sest: error: please provide a name for the container to change to password of")
+			fmt.Println("sest: error: provide a name for the container to change to password of")
 			os.Exit(1)
 		}
 
@@ -379,7 +382,11 @@ func main() {
 			os.Exit(1)
 		}
 
-		newC.Write()
+		err = newC.Write()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 
 
