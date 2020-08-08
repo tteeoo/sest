@@ -81,7 +81,7 @@ func NewContainer(name, dir, password string) (*Container, error) {
 }
 
 // GetData decrypts and returns the data that the container stores
-func (c *Container) GetData(password string) (map[string][]string, error) {
+func (c *Container) GetData(password string) (map[string]string, error) {
 	validHash, err := bDecode(c.Master[0])
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (c *Container) GetData(password string) (map[string][]string, error) {
 			return nil, err
 		}
 
-		var data map[string][]string
+		var data map[string]string
 		err = json.Unmarshal(bData, &data)
 		if err != nil {
 			return nil, err
@@ -125,7 +125,7 @@ func (c *Container) GetData(password string) (map[string][]string, error) {
 }
 
 // SetData encrypts the given data with the password and ensures it is the correct password, then it sets the containers .Data
-func (c *Container) SetData(newData map[string][]string, password string) error {
+func (c *Container) SetData(newData map[string]string, password string) error {
 	validHash, err := bDecode(c.Master[0])
 	if err != nil {
 		return err

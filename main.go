@@ -19,6 +19,18 @@ func init() {
 	}
 }
 
+func readPwd() (string, error) {
+	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+	reader := bufio.NewReader(os.Stdin)
+	password, err := reader.ReadString('\n')
+	exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+	print("\n")
+	if err != nil {
+		return "", err
+	}
+	return password, nil
+}
+
 func main() {
 
 	// Make dir if it does not exist
@@ -31,7 +43,7 @@ func main() {
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		fmt.Println("sest: error: invalid arguments, run `sest --help` for usage")
+		fmt.Println("sest: error: invalid arguments, run 'sest --help' for usage")
 		os.Exit(1)
 	}
 
@@ -70,24 +82,18 @@ func main() {
 
 		for _, char := range []string{".", "/", "@", "\\", "&", "*"} {
 			if strings.Contains(args[1], char) {
-				fmt.Println("sest: error: invalid character (" + char + ") in container name")
+				fmt.Println("sest: error: invalid character '" + char + "' in container name")
 				os.Exit(1)
 			}
 		}
 
 		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
-			exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
-			reader := bufio.NewReader(os.Stdin)
 			fmt.Print("sest: new container password: ")
-			password, err := reader.ReadString('\n')
-			password = password[0 : len(password)-1]
+			password, err := readPwd()
 			if err != nil {
 				fmt.Println("sest: error:", err)
 				os.Exit(1)
 			}
-			print("\n")
-			exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 			cont, err := lib.NewContainer(args[1], contDir, password)
 			if err != nil {
@@ -119,17 +125,14 @@ func main() {
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("sest: press enter to delete the container \"" + args[1] + "\"")
+		fmt.Print("sest: press enter to delete the container '" + args[1] + "'")
 		_, err := reader.ReadString('\n')
+		print("\n")
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		err = os.Remove(contDir + "/" + args[1] + ".cont.json")
 		if err != nil {
@@ -153,18 +156,13 @@ func main() {
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 
-		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
-		password, err := reader.ReadString('\n')
-		password = password[0 : len(password)-1]
+		password, err := readPwd()
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
@@ -193,7 +191,7 @@ func main() {
 			}
 			os.Exit(0)
 		}
-		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
+		fmt.Println("sest: error: the key '" + args[2] + "' does not exist in that container")
 		os.Exit(1)
 
 	// Stores a key-value pair in a container
@@ -211,18 +209,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
-		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
-		password, err := reader.ReadString('\n')
-		password = password[0 : len(password)-1]
+		password, err := readPwd()
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
 		c, err := lib.OpenContainer(args[1], contDir)
 		if err != nil {
@@ -237,41 +229,24 @@ func main() {
 		}
 
 		if _, ok := data[args[2]]; ok {
-			fmt.Println("sest: error: the key \"" + args[2] + "\" already exists in that container")
+			fmt.Println("sest: error: the key '" + args[2] + "' already exists in that container")
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-		reader = bufio.NewReader(os.Stdin)
 		fmt.Print("sest: new key value: ")
-		value, err := reader.ReadString('\n')
-		value = value[0 : len(value)-1]
+		value, err := readPwd()
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-		reader = bufio.NewReader(os.Stdin)
-		fmt.Print("sest: optional second value (username) leave blank for none: ")
-		username, _ := reader.ReadString('\n')
-		username = username[0 : len(username)-1]
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
-
-		if len(username) > 0 {
-			data[args[2]] = []string{value, username}
-		} else {
-			data[args[2]] = []string{value}
-		}
+		data[args[2]] = value[0 : len(value)-1]
 		err = c.SetData(data, password)
-		c.Write()
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
 		}
+		c.Write()
 		os.Exit(0)
 
 	// Gets the value from a key that is inside a container
@@ -289,14 +264,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("sest: container password: ")
-		password, _ := reader.ReadString('\n')
-		password = password[0 : len(password)-1]
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+		fmt.Print("sest: container password")
+		password, err := readPwd()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 
 		c, err := lib.OpenContainer(args[1], contDir)
 
@@ -319,7 +292,7 @@ func main() {
 
 				go func() {
 					defer stdin.Close()
-					io.WriteString(stdin, data[args[2]][0])
+					io.WriteString(stdin, data[args[2]])
 				}()
 
 				err = cmd.Run()
@@ -330,13 +303,10 @@ func main() {
 				}
 			}
 
-			fmt.Println(data[args[2]][0])
-			if len(data[args[2]]) > 1 {
-				fmt.Println(data[args[2]][1])
-			}
+			fmt.Println(data[args[2]])
 			os.Exit(0)
 		}
-		fmt.Println("sest: error: the key \"" + args[2] + "\" does not exist in that container")
+		fmt.Println("sest: error: the key '" + args[2] + "' does not exist in that container")
 		os.Exit(1)
 
 	// Lists all the keys in a container
@@ -351,14 +321,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-
-		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: container password: ")
-		password, _ := reader.ReadString('\n')
-		password = password[0 : len(password)-1]
-		print("\n")
-		exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+		password, err := readPwd()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
 
 		c, err := lib.OpenContainer(args[1], contDir)
 
@@ -379,22 +347,23 @@ func main() {
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
-			"usage:\n\tsest [--version | -V] | [--help | -h] | [<command> [arguments]]\n\n" +
+			"usage: sest [-h | --help]\n" +
+			"            [-V | --version]\n" +
+			"            [<command> [arguments]]\n\n" +
 			"commands:\n" +
-			"\tls                   \n\t\tlists all containers\n\n" +
-			"\tmk  <container>      \n\t\tmakes a new container, will ask for a master password\n\n" +
-			"\tln  <container>      \n\t\tlists all keys in a container, will ask for a master password\n\n" +
-			"\tdel <container>      \n\t\tdeletes a container, will ask for confirmation\n\n" +
-			"\tin  <container> <key>\n\t\tstores a new key-value pair in a container, will ask for a master password and a value\n\n" +
-			"\tcp  <container> <key>\n\t\tcopies the value of a key from a container to the clipboard (needs xclip installed),\n\t\twill ask for a master password\n\n" +
-			"\trm  <container> <key>\n\t\tremoves a key-value pair from a container, will ask for a master password\n\n" +
-			"\tout <container> <key>\n\t\tprints out the value of a key from a container, will ask for a master password\n\n" +
-			"set the environment variable SEST_DIR to the directory where you want containers to be stored (no slash at the end), defaults to ~/.sest\n\n" +
-			"source hosted on GitHub (https://github.com/tteeoo/sest)\n" +
-			"licensed under the BSD 2-clause license (https://opensource.org/licenses/bsd-2-clause)")
+			"       ls                        lists all containers\n" +
+			"       mk  <container>           makes a new container, asks for a master password\n" +
+			"       ln  <container>           lists all keys in a container, asks for a master password\n" +
+			"       del <container>           deletes a container, asks for confirmation\n" +
+			"       in  <container> <key>     stores a new key-value pair in a container, asks for a master password and a value\n" +
+			"       cp  <container> <key>     copies the value of a key from a container to the clipboard (requires xclip), asks for a master password\n" +
+			"       rm  <container> <key>     removes a key-value pair from a container, asks for a master password\n" +
+			"       out <container> <key>     prints out the value of a key from a container, asks for a master password\n\n" +
+			"licensed under the BSD 2-clause license\n" +
+			"set the environment variable SEST_DIR to the directory where you want containers to be stored, it defaults to ~/.sest")
 
 	default:
-		fmt.Println("sest: error: invalid arguments, run \"sest --help\" for usage")
+		fmt.Println("sest: error: invalid arguments, run 'sest --help' for usage")
 		os.Exit(1)
 	}
 
