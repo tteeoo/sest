@@ -10,7 +10,7 @@ A container stores data in key-value pairs, with a main value, and another optio
 The cli `sest` app works on Linux based systems and probably most other unix based systems (not tested).
 
 ## Installation
-If you have Go installed [(install Go here)](https://golang.org/doc/install#install), simply clone the repo and run `go install`.
+If you have Go installed then simply clone the repo and run `go install`.
 
 Otherwise, a Linux binary is provided with the latest release on GitHub.
 
