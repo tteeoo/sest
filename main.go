@@ -128,7 +128,6 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("sest: press enter to delete the container '" + args[1] + "'")
 		_, err := reader.ReadString('\n')
-		print("\n")
 		if err != nil {
 			fmt.Println("sest: error:", err)
 			os.Exit(1)
@@ -264,7 +263,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Print("sest: container password")
+		fmt.Print("sest: container password: ")
 		password, err := readPwd()
 		if err != nil {
 			fmt.Println("sest: error:", err)
@@ -342,8 +341,50 @@ func main() {
 
 		os.Exit(0)
 
+	// Changes a container's password
+	case "chp":
+		if len(args) < 2 {
+			fmt.Println("sest: error: please provide a name for the container to change to password of")
+			os.Exit(1)
+		}
+
+		if _, err := os.Stat(contDir + "/" + args[1] + ".cont.json"); os.IsNotExist(err) {
+			fmt.Println("sest: error: a container with that name does not exist")
+			os.Exit(1)
+		}
+
+		fmt.Print("sest: container password: ")
+		password, err := readPwd()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		c, err := lib.OpenContainer(args[1], contDir)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		fmt.Print("sest: new container password: ")
+		newPassword, err := readPwd()
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		newC, err := c.ChangePassword(password, newPassword)
+		if err != nil {
+			fmt.Println("sest: error:", err)
+			os.Exit(1)
+		}
+
+		newC.Write()
+		os.Exit(0)
+
+
 	case "-V", "--version":
-		fmt.Println("sest: version: 0.1.6")
+		fmt.Println("sest version 0.1.6")
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
@@ -351,16 +392,17 @@ func main() {
 			"            [-V | --version]\n" +
 			"            [<command> [arguments]]\n\n" +
 			"commands:\n" +
-			"       ls                        lists all containers\n" +
-			"       mk  <container>           makes a new container, asks for a master password\n" +
-			"       ln  <container>           lists all keys in a container, asks for a master password\n" +
-			"       del <container>           deletes a container, asks for confirmation\n" +
-			"       in  <container> <key>     stores a new key-value pair in a container, asks for a master password and a value\n" +
-			"       cp  <container> <key>     copies the value of a key from a container to the clipboard (requires xclip), asks for a master password\n" +
-			"       rm  <container> <key>     removes a key-value pair from a container, asks for a master password\n" +
-			"       out <container> <key>     prints out the value of a key from a container, asks for a master password\n\n" +
+			"     ls                        lists all containers\n" +
+			"     mk  <container>           makes a new container, asks for a password\n" +
+			"     ln  <container>           lists all keys in a container, asks for a password\n" +
+			"     chp <container>           changes a container's password, asks for a password and a new password\n" +
+			"     el <container>           deletes a container, asks for confirmation\n" +
+			"     in  <container> <key>     stores a new key-value pair in a container, asks for a password and a value\n" +
+			"     cp  <container> <key>     copies the value of a key from a container to the clipboard (requires xclip), asks for a password\n" +
+			"     rm  <container> <key>     removes a key-value pair from a container, asks for a password\n" +
+			"     out <container> <key>     prints out the value of a key from a container, asks for a password\n\n" +
 			"licensed under the BSD 2-clause license\n" +
-			"set the environment variable SEST_DIR to the directory where you want containers to be stored, it defaults to ~/.sest")
+			"set the environment variable 'SEST_DIR' to the directory where you want containers to be stored, it defaults to ~/.sest")
 
 	default:
 		fmt.Println("sest: error: invalid arguments, run 'sest --help' for usage")

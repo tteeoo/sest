@@ -30,6 +30,7 @@ sest [-h | --help ]
 ls                     lists all containers
 mk  <container>        makes a new container, asks for a master password
 ln  <container>        lists all keys in a container, asks for a master password
+chp  <container>       changes a container's password, asks for a master password and a new password
 del <container>        deletes a container, asks for confirmation
 in  <container> <key>  stores a new key-value pair in a container, asks for a master password and a value
 cp  <container> <key>  copies the value of a key from a container to the clipboard (requires xclip), asks for a master password

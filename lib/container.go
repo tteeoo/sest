@@ -51,6 +51,45 @@ func OpenContainer(name, dir string) (*Container, error) {
 	return &cont, nil
 }
 
+// ChangePasswod creates a new container encrypted with the given password, saved at the given file name and directory
+// It then returns the derived container struct
+func (c *Container) ChangePassword(password, newPassword string) (*Container, error) {
+	salt, err := generateSalt(16)
+	if err != nil {
+		return &Container{}, err
+	}
+
+	encSalt, err := generateSalt(16)
+	if err != nil {
+		return &Container{}, err
+	}
+
+	hash := a2Hash(newPassword, salt)
+	encHash := a2Hash(newPassword, encSalt)
+
+	oldData, err := c.GetData(password)
+	if err != nil {
+		return &Container{}, err
+	}
+
+	jdata, err :=json.Marshal(oldData)
+	if err != nil {
+		return &Container{}, err
+	}
+
+	encData, err := encrypt(string(jdata), encHash)
+	if err != nil {
+		return &Container{}, err
+	}
+
+	return &Container{
+		Name:   c.Name,
+		Dir:    c.Dir,
+		Master: [3]string{bEncode(hash), bEncode(salt), bEncode(encSalt)},
+		Data:   bEncode(encData),
+	}, nil
+}
+
 // NewContainer creates a new container encrypted with the given password, saved at the given file name and directory
 // It then returns the derived container struct
 func NewContainer(name, dir, password string) (*Container, error) {
@@ -121,7 +160,7 @@ func (c *Container) GetData(password string) (map[string]string, error) {
 		return data, nil
 	}
 
-	return nil, errors.New("invalid password for container \"" + c.Name + "\"")
+	return nil, errors.New("invalid password for container '" + c.Name + "'")
 }
 
 // SetData encrypts the given data with the password and ensures it is the correct password, then it sets the containers .Data
@@ -161,5 +200,5 @@ func (c *Container) SetData(newData map[string]string, password string) error {
 		return nil
 	}
 
-	return errors.New("invalid password for container \"" + c.Name + "\"")
+	return errors.New("invalid password for container '" + c.Name + "'")
 }
