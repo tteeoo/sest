@@ -9,15 +9,15 @@ import (
 
 // Container represents a password-containing file
 type Container struct {
-	Name   string
+	name   string
 	Master [3]string
 	Data   string
-	Dir    string
+	dir    string
 }
 
 // GetPath returns the path where the container is stored
 func (c *Container) GetPath() string {
-	return c.Dir + "/" + c.Name + ".cont.json"
+	return c.dir + "/" + c.name + ".cont.json"
 }
 
 // Write saves the container to its file
@@ -47,6 +47,8 @@ func OpenContainer(name, dir string) (*Container, error) {
 	if err != nil {
 		return &Container{}, err
 	}
+	cont.dir = dir
+	cont.name = name
 
 	return &cont, nil
 }
@@ -83,8 +85,8 @@ func (c *Container) ChangePassword(password, newPassword string) (*Container, er
 	}
 
 	return &Container{
-		Name:   c.Name,
-		Dir:    c.Dir,
+		name:   c.name,
+		dir:    c.dir,
 		Master: [3]string{bEncode(hash), bEncode(salt), bEncode(encSalt)},
 		Data:   bEncode(encData),
 	}, nil
@@ -112,8 +114,8 @@ func NewContainer(name, dir, password string) (*Container, error) {
 	}
 
 	return &Container{
-		Name:   name,
-		Dir:    dir,
+		name:   name,
+		dir:    dir,
 		Master: [3]string{bEncode(hash), bEncode(salt), bEncode(encSalt)},
 		Data:   bEncode(emptyData),
 	}, nil
@@ -160,7 +162,7 @@ func (c *Container) GetData(password string) (map[string]string, error) {
 		return data, nil
 	}
 
-	return nil, errors.New("invalid password for container '" + c.Name + "'")
+	return nil, errors.New("invalid password for container '" + c.name + "'")
 }
 
 // SetData encrypts the given data with the password and ensures it is the correct password, then it sets the containers .Data
@@ -200,5 +202,5 @@ func (c *Container) SetData(newData map[string]string, password string) error {
 		return nil
 	}
 
-	return errors.New("invalid password for container '" + c.Name + "'")
+	return errors.New("invalid password for container '" + c.name + "'")
 }

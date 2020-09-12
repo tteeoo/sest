@@ -506,7 +506,7 @@ func main() {
 		os.Exit(0)
 
 	case "-V", "--version":
-		fmt.Println("sest version 0.1.7")
+		fmt.Println("sest version 0.1.8")
 
 	case "-h", "--help":
 		fmt.Println("sest: secure strings\n\n" +
