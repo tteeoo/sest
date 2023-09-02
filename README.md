@@ -16,8 +16,6 @@ Otherwise, a Linux binary is provided with the latest release on GitHub.
 
 The default directory where containers are stored is `$HOME/.sest`, set the environment variable `SEST_DIR` to change this (no slash at the end).
 
-In order for the `cp` command to copy the secret to your clipboard you will need `xclip` installed, and of course you'll need to be running Xorg for xclip to work.
-
 ## Usage
 ```
 sest [-h | --help ] 
@@ -41,7 +39,7 @@ imp <container> <path> import a container from a json file
 ```
 
 ## Security
-To be frank, I am no cryptography expert, and one may find a flaw in this system. I'm (interperet this how you wish) 99% sure that it's perfectly fine for storing sensitive information.
+To be frank, I am no cryptography expert, and one may find a flaw in this system. I'm (interpret this how you wish) 99% sure that it's perfectly fine for storing sensitive information.
 
 So, here's how it works:
 * A random salt is generated and used with your password in an Argon2id hash

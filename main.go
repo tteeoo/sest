@@ -7,9 +7,12 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/tteeoo/sest/lib"
-	"io"
+	"golang.org/x/term"
+	"golang.design/x/clipboard"
+	"syscall"
+	// "io"
 	"os"
-	"os/exec"
+	// "os/exec"
 	"strings"
 )
 
@@ -22,15 +25,18 @@ func init() {
 }
 
 func readPwd() (string, error) {
-	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-	reader := bufio.NewReader(os.Stdin)
-	password, err := reader.ReadString('\n')
-	exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+	// exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+	// reader := bufio.NewReader(os.Stdin)
+	// password, err := reader.ReadString('\n')
+	// exec.Command("stty", "-F", "/dev/tty", "echo").Run()
+
+	password, err := term.ReadPassword(syscall.Stdin)
 	print("\n")
 	if err != nil {
 		return "", err
 	}
-	return password, nil
+	fmtp := strings.TrimSpace(string(password))
+	return fmtp + "\n", nil
 }
 
 func main() {
@@ -349,24 +355,27 @@ func main() {
 
 			// copy to clipboard (needs xclip)
 			if args[0] == "cp" {
-				cmd := exec.Command("xclip")
-				stdin, err := cmd.StdinPipe()
+				// cmd := exec.Command("xclip")
+				// stdin, err := cmd.StdinPipe()
+				// if err != nil {
+				// 	fmt.Println("sest: error:", err)
+				// 	os.Exit(1)
+				// }
+
+				// go func() {
+				// 	defer stdin.Close()
+				// 	io.WriteString(stdin, data[args[2]])
+				// }()
+
+				// err = cmd.Run()
+
+				err := clipboard.Init()
 				if err != nil {
 					fmt.Println("sest: error:", err)
 					os.Exit(1)
 				}
-
-				go func() {
-					defer stdin.Close()
-					io.WriteString(stdin, data[args[2]])
-				}()
-
-				err = cmd.Run()
+				clipboard.Write(clipboard.FmtText, []byte(data[args[2]]))
 				os.Exit(0)
-				if err != nil {
-					fmt.Println("sest: error:", err)
-					os.Exit(1)
-				}
 			}
 
 			fmt.Println(data[args[2]])
